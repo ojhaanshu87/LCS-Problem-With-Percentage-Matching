@@ -1,0 +1,23 @@
+Code Contains :
+
+A) Prototype of 6 Row from DB & 1 User Input for Testing.
+
+B) Handles all regular expressions (special characters like $, - etc) except _ and Space.
+
+C)  User Input match the database only if >=50% Exact word matches @ any order sequence  (it follow Follow maximum containing Words with some longest pattern)
+
+Test Case 1 :
+User Input : jdfkj kjdfkj kfdkldkl
+Output : No match from database
+
+Test Case 2 :
+User Input : AJMAL KHAN PARK,586A,NA,BLOCK 57
+Output : 586A,NA,AJMAL KHAN PARK,BLOCK 57,KAROL  BAGH,CENTRAL,110005
+
+Test Case 3 :
+User Input : AJMAL KHAN PARK
+Output : No data found, coz 50% criteria not match
+
+Test Case 4 :
+User Input : NA
+Output : Please enter correct data
