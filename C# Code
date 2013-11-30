@@ -1,0 +1,180 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Collections;
+
+namespace DB_Constraint_Final_New
+{
+	class MainClass
+	{
+		static String databaseRow1;
+        static String databaseRow2;
+        static String databaseRow3;
+        static String databaseRow4;
+        static String databaseRow5;
+        static String databaseRow6;
+        static String userinput;
+        static int count = 0;
+        static string TotalValueCalculate;
+		
+		 static void Main()
+        {
+            try
+            {
+                start();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                Console.ReadLine();
+            }
+        }
+		
+		  static void start()
+        {
+
+            //  Console.WriteLine("Please enter a string:");
+            databaseRow1 = "586A,NA,AJMAL KHAN PARK,BLOCK 57,KAROL BAGH,CENTRAL,110005";
+            string row1 = databaseRow1.ToLower();
+            string DBRow1 = Regex.Replace(row1, "[^a-zA-Z0-9_]+", " ");
+            Console.WriteLine(DBRow1 );
+            Console.ReadLine();
+
+
+            // Console.WriteLine("Please enter a second string:");
+            databaseRow2 = "16/1363E,NA,DEV NAGAR,THAKKAR BAPA NAGAR,KAROL BAGH,north,110005";
+            string row2 = databaseRow2.ToLower();
+            string DBRow2 = Regex.Replace(row2, "[^a-zA-Z0-9_]+", " ");
+            Console.WriteLine(DBRow2);
+            Console.ReadLine();
+
+            databaseRow3 = "NA,DRDO CENTRE,KHYBER PASS,CHANDRAWALI,CIVIL LINE,NORTH,110054";
+            string row3 = databaseRow3.ToLower();
+            string DBRow3 = Regex.Replace(row3, "[^a-zA-Z0-9_]+", " ");
+            Console.WriteLine(DBRow3);
+            Console.ReadLine();
+
+            databaseRow4 = "40B/14,NA,KHYBER PASS,P & T COLONY,CIVIL LINE,NORTH,110054";
+            string row4 = databaseRow4.ToLower();
+            string DBRow4 = Regex.Replace(row4, "[^a-zA-Z0-9_]+", " ");
+            Console.WriteLine(DBRow4);
+            Console.ReadLine();
+
+            databaseRow5 = "33/A1,DELHI TRANSCO LTD OFFICER'S FLATS,KHYBER PASS,P & T COLONY,CIVIL LINE,NORTH,110054";
+            string row5 = databaseRow5.ToLower();
+            string DBRow5 = Regex.Replace(row5, "[^a-zA-Z0-9_]+", " ");
+            Console.WriteLine(DBRow5);
+            Console.ReadLine();
+
+            databaseRow6 = "NA,NA,KHYBER PASS,P & T COLONY,CIVIL LINE,NORTH,110054";
+            string row6 = databaseRow6.ToLower();
+            string DBRow6 = Regex.Replace(row6, "[^a-zA-Z0-9_]+", " ");
+            Console.WriteLine(DBRow6);
+            Console.ReadLine();
+
+            Console.WriteLine("Please enter a string:");
+            userinput = Console.ReadLine();
+            string user = userinput.ToLower().Trim();	//change 1 added to avoid na<space>
+            string UserInput = Regex.Replace(user, "[^a-zA-Z0-9_]+", " ");
+			
+			
+            //Validate User String, recover bug when User Enters 'NA' only.
+          if (UserInput == "na")
+          {
+               Console.WriteLine("Please provide address");
+               return;
+          }
+			
+			int validSubstrBdg = 3;
+            string checkBdgNum = UserInput.Substring(0, validSubstrBdg);
+            Console.WriteLine("Substring value =" + UserInput.Substring(0, validSubstrBdg));
+            Console.ReadLine();
+            bool lastValid = true;
+
+            if (!Regex.IsMatch(checkBdgNum, @"(([0-9A-Z])(?!\2))*$", RegexOptions.IgnorePatternWhitespace))
+                lastValid = false;
+            if (!Regex.IsMatch(checkBdgNum, @"(([0-9A-Z])(?!\2))*$", RegexOptions.IgnorePatternWhitespace))
+                lastValid = false;
+
+            if (!lastValid)
+            {
+                Console.WriteLine("Please enter block for building");
+                Console.ReadLine();
+                return;
+            }
+			
+			string[] DBContainer = { DBRow1, DBRow2, DBRow3, DBRow4, DBRow5, DBRow6 };
+			
+			 int myCompare = 0;
+           bool first = true;
+          int check = 0;
+           string result = "";
+           int nextMaxCount = 0;
+         int k = 0;
+			
+			 //Queue theQueue = new Queue(2); Not required
+            var getTopMatchingRows = new List<KeyValuePair<int, string>>();
+            foreach (string a in DBContainer)
+            {
+             
+                if (first)
+                {
+                    first = false;
+                   check = 1;
+                }
+                check = 0;
+                string[] words = a.Split(' ');
+
+                count = 0;
+                string[] words2 = UserInput.Split(' ');
+
+                int UserInputCount = words.Length;
+            
+                foreach (string s1 in words2)
+                {
+                   
+                    foreach (string jj in words)
+                    {
+                        if (s1 == jj)
+                        {
+                            count++;
+                        }
+                    }
+
+                }
+				
+				//get the percentage matching between userString and Database Row
+                if (myCompare < count)
+                {
+					//Console.WriteLine("Value of slm count "+count+slm);
+                    TotalValueCalculate = ((count*100)/UserInputCount) .ToString();
+                    myCompare = count;
+
+                    result = a;
+                     k = 0;
+                    k++;
+                }
+
+            }
+			  Console.WriteLine("the % of  address match is-->" + TotalValueCalculate);
+            Console.ReadLine();
+			//Console.WriteLine("val of TotalValueCalculate  "+Convert.ToInt32(TotalValueCalculate));
+			
+			if ((Convert.ToInt32(TotalValueCalculate)) >= 50)
+			{
+				Console.WriteLine("the address is-->" + result);
+            	Console.ReadLine();
+				
+			}
+			else
+			{
+				Console.WriteLine("Enough data is not provided. Please try again");
+			}
+
+
+
+		}
+}
+}
